@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usuários Cadastrados</title>
+    <link rel="stylesheet" href="tabela.css">
+</head>
+<body>
+    <h2>Usuários Cadastrados</h2>
+    <table id="tabelaUsuarios">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>CEP</th>
+                <th>Cidade</th>
+                <th>Data de Nascimento</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Os dados dos usuários serão inseridos aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        async function carregarUsuarios() {
+            try {
+                const resposta = await fetch("https://inforpiaui.com.br/aula/listar_usuarios.php");
+                const usuarios = await resposta.json();
+
+                const tbody = document.querySelector("#tabelaUsuarios tbody");
+                tbody.innerHTML = ""; // Limpa antes de carregar
+
+                usuarios.forEach((usuario) => {
+                    const linha = document.createElement("tr");
+                    linha.innerHTML = `
+                        <td>${usuario.id}</td>
+                        <td>${usuario.nome}</td>
+                        <td>${usuario.email}</td>
+                        <td>${usuario.cep || 'N/A'}</td>
+                        <td>${usuario.cidade || 'N/A'}</td>
+                        <td>${usuario.data_nascimento || 'N/A'}</td>
+                    `;
+                    tbody.appendChild(linha);
+                });
+            } catch (erro) {
+                console.error("Erro ao carregar usuários:", erro);
+            }
+        }
+
+        // Carrega os dados ao abrir a página
+        carregarUsuarios();
+    </script>
+</body>
+</html>
